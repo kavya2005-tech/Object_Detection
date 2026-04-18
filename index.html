@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face & Object Recognition Block Diagram</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .block {
+            display: inline-block;
+            padding: 15px 20px;
+            margin: 10px;
+            border-radius: 10px;
+            background-color: #3498db;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+        }
+        .arrow {
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="block">Camera Module</div>
+        <div class="arrow">↓</div>
+        <div class="block">Image Processing (YOLOv5, OpenCV)</div>
+        <div class="arrow">↓</div>
+        <div class="block">Object Detection & Recognition</div>
+        <div class="arrow">↓</div>
+        <div class="block">Face Recognition (if enabled)</div>
+        <div class="arrow">↓</div>
+        <div class="block">Audio Processing (TTS with pyttsx3)</div>
+        <div class="arrow">↓</div>
+        <div class="block">Speaker Output</div>
+    </div>
+
+</body>
+</html>

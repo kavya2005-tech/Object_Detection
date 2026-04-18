@@ -1,0 +1,3 @@
+[Camera Module] → [Image Processing (YOLOv5, OpenCV)] → [Object Detection & Recognition]  
+   ↓  
+[Face Recognition (if enabled)] → [Audio Processing (TTS with pyttsx3)] → [Speaker Output]  
