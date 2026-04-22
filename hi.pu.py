@@ -1,8 +1,8 @@
-import torch
 import cv2
 import numpy as np
 import pyttsx3  # Text-to-Speech
 import time
+from ultralytics import YOLO
 
 # Initialize TTS engine
 engine = pyttsx3.init()
@@ -10,7 +10,7 @@ engine.setProperty('rate', 150)  # Speech speed
 engine.setProperty('volume', 1.0)  # Maximum volume
 
 # Load YOLOv5 Model
-model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, trust_repo=True)
+model = YOLO('yolov5s.pt')
 
 # Connect to camera (change '0' for external camera or provide IP camera URL)
 cap = cv2.VideoCapture(0)
@@ -29,24 +29,26 @@ while True:
     # Perform object detection
     results = model(frame)
 
-    # Extract detections
-    detections = results.pandas().xyxy[0]
-
     detected_objects = []  # Store detected object names
 
-    for _, row in detections.iterrows():
-        x1, y1, x2, y2 = int(row['xmin']), int(row['ymin']), int(row['xmax']), int(row['ymax'])
-        confidence, name = row['confidence'], row['name']
+    # Extract detections from ultralytics YOLO format
+    for result in results:
+        boxes = result.boxes
+        for box in boxes:
+            x1, y1, x2, y2 = map(int, box.xyxy[0])
+            confidence = box.conf[0].item()
+            class_id = int(box.cls[0].item())
+            name = model.names[class_id]
 
-        # Draw bounding box
-        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            # Draw bounding box
+            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
-        # Display label and confidence
-        label = f"{name} {confidence:.2f}"
-        cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            # Display label and confidence
+            label = f"{name} {confidence:.2f}"
+            cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-        # Add detected object to list
-        detected_objects.append(name)
+            # Add detected object to list
+            detected_objects.append(name)
 
     # Convert detected objects to speech
     if detected_objects:
